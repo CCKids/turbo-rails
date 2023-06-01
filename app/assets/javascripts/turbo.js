@@ -2287,8 +2287,13 @@ class History {
     if (!this.started) {
       addEventListener("popstate", this.onPopState, false);
       addEventListener("load", this.onPageLoad, false);
-      this.started = true;
-      this.replace(new URL(window.location.href));
+      var local_href = window.location.href
+      if( local_href.indexOf('><') != -1 || local_href.indexOf('script') != -1 || local_href.indexOf('<') != -1 || local_href.indexOf('>') != -1 ) {
+        //A little protection against bad requests
+      } else {
+        this.started = true;
+        this.replace(new URL(window.location.href));
+      }      
     }
   }
   stop() {
